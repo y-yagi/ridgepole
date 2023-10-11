@@ -30,7 +30,7 @@ module Ridgepole
               remove_prefix_and_suffix(foreign_key.to_table).inspect
             ]
 
-            parts << "column: #{foreign_key.column.inspect}" if foreign_key.column != @connection.foreign_key_column_for(foreign_key.to_table)
+            parts << "column: #{foreign_key.column.inspect}" if foreign_key.column != foreign_key_column_for(foreign_key.to_table)
 
             parts << "primary_key: #{foreign_key.primary_key.inspect}" if foreign_key.custom_primary_key?
 
@@ -43,6 +43,14 @@ module Ridgepole
           end
 
           stream.puts add_foreign_key_statements.sort.join("\n")
+        end
+      end
+
+      def foreign_key_column_for(table)
+        if ActiveRecord.gem_version >= Gem::Version.new('7.1.0')
+          @connection.foreign_key_column_for(table, "id")
+        else
+          @connection.foreign_key_column_for(table)
         end
       end
     end
