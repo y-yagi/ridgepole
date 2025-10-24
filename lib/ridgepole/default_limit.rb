@@ -3,7 +3,6 @@
 module Ridgepole
   class DefaultsLimit
     DEFAULT_LIMIT_FOR_MYSQL = {
-      boolean: 1,
       integer: 4,
       bigint: 8,
       float: 24,
